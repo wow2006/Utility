@@ -27,79 +27,81 @@ using namespace boost::this_thread;
 #error("Can not use logger")
 #endif
 
-class LoggerSystem {
-public:
-    enum class Type { Console, File, GUI, ConsoleAndFile };
+namespace utility {
+    class LoggerSystem {
+    public:
+        enum class Type { Console, File, GUI, ConsoleAndFile };
 
-protected:
-    std::map<std::thread::id, std::stringstream> mBuffer;
-    Type mType = Type::Console;
-    std::ofstream mFile;
-    mutex mMutex;
+    protected:
+        std::map<std::thread::id, std::stringstream> mBuffer;
+        Type mType = Type::Console;
+        std::ofstream mFile;
+        mutex mMutex;
 
-public:
-    LoggerSystem(Type _type = Type::Console) : mType(_type) {}
+    public:
+        LoggerSystem(Type _type = Type::Console) : mType(_type) {}
 
-    LoggerSystem(const std::string& _fileName, Type _type = Type::File)
-        : mType(_type) {
-        if (!_fileName.empty()) {
-            mFile.open(_fileName);
-            if (!mFile.is_open()) {
-                mType = Type::Console;
+        LoggerSystem(const std::string& _fileName, Type _type = Type::File)
+            : mType(_type) {
+            if (!_fileName.empty()) {
+                mFile.open(_fileName);
+                if (!mFile.is_open()) {
+                    mType = Type::Console;
+                }
             }
         }
-    }
 
-    ~LoggerSystem() {
-        if (mFile.is_open()) {
-            mFile.close();
+        ~LoggerSystem() {
+            if (mFile.is_open()) {
+                mFile.close();
+            }
         }
-    }
 
-    LoggerSystem& operator<<(const std::string& _input) {
-        lock_guard<std::mutex> block_threads_until_finish_this_job(mMutex);
-        thread::id id = get_id();
-        std::stringstream& buf = mBuffer[id];
-        buf << _input;
-        if (_input.find('\n') != std::string::npos) flush(buf);
-        return *this;
-    }
-
-    LoggerSystem& operator<<(const char* _input) {
-        lock_guard<mutex> block_threads_until_finish_this_job(mMutex);
-        thread::id id = get_id();
-        std::stringstream& buf = mBuffer[id];
-        buf << _input;
-        if (memchr(_input, '\n', strlen(_input))) flush(buf);
-        return *this;
-    }
-
-    template <typename T>
-    LoggerSystem& operator<<(const T& _input) {
-        lock_guard<mutex> block_threads_until_finish_this_job(mMutex);
-        thread::id id = get_id();
-        std::stringstream& buf = mBuffer[id];
-        buf << _input;
-        return *this;
-    }
-
-protected:
-    void flush(std::stringstream& _buffer) {
-        switch (mType) {
-            case Type::ConsoleAndFile:
-                mFile << _buffer.str();
-            case Type::Console:
-                std::cout << _buffer.str();
-                break;
-            case Type::File:
-                mFile << _buffer.str();
-                break;
-            case Type::GUI:
-                break;
+        LoggerSystem& operator<<(const std::string& _input) {
+            lock_guard<std::mutex> block_threads_until_finish_this_job(mMutex);
+            thread::id id = get_id();
+            std::stringstream& buf = mBuffer[id];
+            buf << _input;
+            if (_input.find('\n') != std::string::npos) flush(buf);
+            return *this;
         }
-        // Clear stringStream
-        _buffer.str(std::string());
-    }
-};
+
+        LoggerSystem& operator<<(const char* _input) {
+            lock_guard<mutex> block_threads_until_finish_this_job(mMutex);
+            thread::id id = get_id();
+            std::stringstream& buf = mBuffer[id];
+            buf << _input;
+            if (memchr(_input, '\n', strlen(_input))) flush(buf);
+            return *this;
+        }
+
+        template <typename T>
+        LoggerSystem& operator<<(const T& _input) {
+            lock_guard<mutex> block_threads_until_finish_this_job(mMutex);
+            thread::id id = get_id();
+            std::stringstream& buf = mBuffer[id];
+            buf << _input;
+            return *this;
+        }
+
+    protected:
+        void flush(std::stringstream& _buffer) {
+            switch (mType) {
+                case Type::ConsoleAndFile:
+                    mFile << _buffer.str();
+                case Type::Console:
+                    std::cout << _buffer.str();
+                    break;
+                case Type::File:
+                    mFile << _buffer.str();
+                    break;
+                case Type::GUI:
+                    break;
+            }
+            // Clear stringStream
+            _buffer.str(std::string());
+        }
+    };
+}
 
 #endif  // LOGGER

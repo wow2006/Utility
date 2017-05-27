@@ -4,7 +4,7 @@
 int
 main(int argc, char* argv[]){
 	std::vector<std::vector<float>> keysList;
-	Timer time;
+	utility::Timer time;
 	KDTree::generateList(keysList, 10, 3);
 	time.end("Generate");
 	time.reset();

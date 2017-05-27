@@ -1,9 +1,9 @@
 project(Testing)
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 include(./cmake/checkCompiler.cmake)
 
-option(Utility_TEST  "" OFF)
+option(Utility_TEST  "" ON)
 option(Utility_CUDA  "" OFF)
 option(Utility_BOOST "" OFF)
 
@@ -20,6 +20,10 @@ if(Utility_CUDA)
     find_package(CUDA REQUIRED)
     include_directories(${CUDA_INCLUDE_DIRS})
     add_definitions(-DUSE_CUDA)
+endif()
+
+if(Utility_TEST)
+    add_subdirectory(test)
 endif()
 
 set(sources
