@@ -23,6 +23,7 @@ if(Utility_CUDA)
 endif()
 
 if(Utility_TEST)
+    enable_testing()
     add_subdirectory(test)
 endif()
 

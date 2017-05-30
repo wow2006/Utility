@@ -26,6 +26,38 @@ TEST(StringUtility, reverse_cstring) {
     EXPECT_TRUE(strcmp(input, output) == 0);
 }
 
+TEST(StringUtility, isRotated)
+{
+    const std::string x = "abc";
+    const std::string y = "bca";
+
+    EXPECT_TRUE(utility::isRotated(x, y));
+}
+
+TEST(StringUtility, isRotated_notSameSize)
+{
+    const std::string x = "abc";
+    const std::string y = "bcdz";
+
+    EXPECT_FALSE(utility::isRotated(x, y));
+}
+
+TEST(StringUtility, isRotated_FALSE)
+{
+    const std::string x = "abc";
+    const std::string y = "bcd";
+
+    EXPECT_FALSE(utility::isRotated(x, y));
+}
+
+TEST(StringUtility, isRotated_empty)
+{
+    const std::string x = "";
+    const std::string y = "";
+
+    EXPECT_FALSE(utility::isRotated(x, y));
+}
+
 int main(int argc, char* argv[])
 {
   ::testing::InitGoogleTest(&argc, argv);
