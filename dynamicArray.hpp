@@ -1,3 +1,11 @@
+/** 
+* @file dynamicArray.hpp
+* @Synopsis Implement dynamic array 
+* inspired by https://github.com/Robbepop/dynarray/blob/master/dynarray.hpp
+* @author Ahmed Abd El-Aal <eng.ahmedhussein89@gmail.com>
+* @version 0.1
+* @date 2017-06-05
+*/
 #ifndef DYNAMIC_ARRAY_HPP
 #define DYNAMIC_ARRAY_HPP
 #include <memory>
