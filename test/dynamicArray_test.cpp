@@ -1,16 +1,29 @@
 #include "dynamicArray.hpp"
 #include <gtest/gtest.h>
 
-TEST(DynamucArray, default_constructor)
-{
+TEST(DynamucArray, default_constructor) {
     dynamicArray<int> x;
     x.resize(5);
 
     EXPECT_EQ(5, x.size());
 }
 
-TEST(DynamucArray, copy_constructor)
-{
+TEST(DynamucArray, size_constructor) {
+    dynamicArray<int> x(5);
+
+    EXPECT_EQ(5, x.size());
+}
+
+TEST(DynamucArray, size_fill_constructor) {
+    dynamicArray<int> x(3, 10);
+
+    EXPECT_EQ(3, x.size());
+    EXPECT_EQ(10, x[0]);
+    EXPECT_EQ(10, x[1]);
+    EXPECT_EQ(10, x[2]);
+}
+
+TEST(DynamucArray, copy_constructor) {
     dynamicArray<int> x = {1, 2, 3, 4, 5};
     dynamicArray<int> y(x);
 
@@ -22,8 +35,7 @@ TEST(DynamucArray, copy_constructor)
     EXPECT_EQ(x[4], y[4]);
 }
 
-TEST(DynamucArray, move_constructor)
-{
+TEST(DynamucArray, move_constructor) {
     dynamicArray<int> x = {1, 2, 3, 4, 5};
     dynamicArray<int> y(std::move(x));
 
@@ -35,8 +47,7 @@ TEST(DynamucArray, move_constructor)
     EXPECT_EQ(5, y[4]);
 }
 
-TEST(DynamucArray, initializer_list)
-{
+TEST(DynamucArray, initializer_list) {
     dynamicArray<int> x = {1, 2, 3, 4, 5};
 
     EXPECT_EQ(5, x.size());
@@ -47,28 +58,22 @@ TEST(DynamucArray, initializer_list)
     EXPECT_EQ(5, x[4]);
 }
 
-TEST(DynamucArray, begin)
-{
+TEST(DynamucArray, begin) {
     dynamicArray<int> x = {1, 2, 3, 4, 5};
     EXPECT_EQ(1, *x.begin());
 }
 
-TEST(DynamucArray, begin_const)
-{
+TEST(DynamucArray, begin_const) {
     const dynamicArray<int> x = {1, 2, 3, 4, 5};
     EXPECT_EQ(1, *x.begin());
 }
 
-TEST(DynamucArray, end)
-{
+TEST(DynamucArray, end) {
     dynamicArray<int> x = {1, 2, 3, 4, 5};
-    EXPECT_EQ(5, *(x.end()-1));
+    EXPECT_EQ(5, *(x.end() - 1));
 }
 
-TEST(DynamucArray, end_const)
-{
+TEST(DynamucArray, end_const) {
     const dynamicArray<int> x = {1, 2, 3, 4, 5};
-    EXPECT_EQ(5, *(x.end()-1));
+    EXPECT_EQ(5, *(x.end() - 1));
 }
-
-
